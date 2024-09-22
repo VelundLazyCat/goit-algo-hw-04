@@ -24,49 +24,36 @@
 Ваша програма має вміти ідентифікувати та повідомляти про неправильно введені команди.
 '''
 
-
-# щоб зробити масштабування більш постим хендлер буде передвати у набір функцій однаковий комплект змінних.
-# то вже на розсуд логіки конкретного метода, буде він їх оброблювать та перевірять чи ні
 def say_hello(contacts, *args):
-    print("How can I help you?")
-    return 'hello'
+    return "How can I help you?"
 
 
-# метод прощання
 def good_bye(contacts, *args):
-    print("Good bye!")
-    input('Press Enter please...')
-    return 'exit'
+    return "Good bye!\nPress Enter please..."
 
 
-# додаєвання нового контакту
 def add_contact(contacts, *args):
     name, phone = args
     contacts[name] = phone
-    print(f'New contact: {name}, phone:{phone} added')
-    return 'Contact added'
+    return f'New contact: {name}, phone:{phone} added'
 
 
-# Зміна існуючого контакту
 def do_change(contacts, *args):
     name, phone = args
     contacts[name] = phone
-    print(f'Contact {name} has been changed')
-    return 'Contact changed'
+    return f'Contact {name} has been changed'
 
 
-# виведення в консоль питомого контакту
 def show_phone(contacts, *args):
-    name = args
-    print(f' Phone of {name} is: {contacts[name]}')
-    return 'contact showed'
+    name = args[0]
+    return f' Phone of {name} is: {contacts[name]}'
 
 
-# виведення в консоль всіх контактів
 def show_all(contacts, *args):
-    for keys, value in contacts.items():
-        print(keys, ':   ', value)
-    return 'all showed'
+    result = ''
+    for key, value in contacts.items():
+        result += f"{key}:   {value}\n"
+    return result
 
 
 # парсер команд
@@ -88,19 +75,12 @@ COMMANDS = {'hello': say_hello,  'add': add_contact,
             'exit': good_bye,
             }
 
-# головна логіка роботи бота
-
-
 def main():
-    # словник зберігання контактів
     contacts = {}
     print("Welcome to the assistant bot!")
     while True:
-        # приймання команди від користувача
         user_input = input("Enter a command: ").strip().lower()
-        # розділення команди від данних
         command, *args = parse_input(user_input)
-        # якшо команда валідна викликаємо метод, інакше пишемо користувачу що він не правий
         if COMMANDS.get(command):
             try:
                 # обробка усіх помилок невідповідності данних
@@ -108,10 +88,13 @@ def main():
             except ValueError:
                 print('Invalid data. Please try else..')
             # обробляємо сторки які повертають методи, так дізнаємось що пора виходити
-            if result == 'exit':
+            print(result)
+            if 'bye' in result:
+                input()
                 break
         else:
             print('Command unknown. Maybe try else?')
+
 
 
 if __name__ == "__main__":
